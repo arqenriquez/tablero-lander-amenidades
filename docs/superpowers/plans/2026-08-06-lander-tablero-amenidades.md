@@ -1275,8 +1275,12 @@ Abrir `planos.html` con Live Server:
   HIDROSANITARIO, ACABADOS en ese orden.
 - El contador dice "17 planos".
 - Clic en "Estructural": la lista pasa a plana, 9 filas, contador "9 de 17 planos".
-- Escribir `hidraulico` (sin acento) en el buscador: encuentra IH-01 "Instalación
-  hidráulica". Esto valida la normalización de acentos.
+- Escribir `hidraulica` (sin acento) en el buscador: encuentra IH-01 "Instalación
+  hidráulica". Esto valida la normalización de acentos. `HIDRÁULICA` en mayúsculas y con
+  acento debe dar el mismo resultado.
+  > El buscador hace coincidencia de subcadena sobre el texto sin acentos; no conoce
+  > género ni raíces. `hidraulico` en masculino da **cero** resultados y eso es correcto:
+  > el plano se llama "hidráulica". Buscar `hidrau` los encuentra igual.
 - Escribir `zzz`: sale el estado vacío con el botón "Limpiar filtros", y el botón funciona.
 - Clic en "Abrir" de ARQ-01: se abre el PDF en pestaña nueva. **Este es el paso crítico
   del `encodeURIComponent`** — si da 404, el nombre de archivo no se está codificando.
