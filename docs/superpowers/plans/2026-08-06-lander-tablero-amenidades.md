@@ -1275,8 +1275,12 @@ Abrir `planos.html` con Live Server:
   HIDROSANITARIO, ACABADOS en ese orden.
 - El contador dice "17 planos".
 - Clic en "Estructural": la lista pasa a plana, 9 filas, contador "9 de 17 planos".
-- Escribir `hidraulico` (sin acento) en el buscador: encuentra IH-01 "Instalación
-  hidráulica". Esto valida la normalización de acentos.
+- Escribir `hidraulica` (sin acento) en el buscador: encuentra IH-01 "Instalación
+  hidráulica". Esto valida la normalización de acentos. `HIDRÁULICA` en mayúsculas y con
+  acento debe dar el mismo resultado.
+  > El buscador hace coincidencia de subcadena sobre el texto sin acentos; no conoce
+  > género ni raíces. `hidraulico` en masculino da **cero** resultados y eso es correcto:
+  > el plano se llama "hidráulica". Buscar `hidrau` los encuentra igual.
 - Escribir `zzz`: sale el estado vacío con el botón "Limpiar filtros", y el botón funciona.
 - Clic en "Abrir" de ARQ-01: se abre el PDF en pestaña nueva. **Este es el paso crítico
   del `encodeURIComponent`** — si da 404, el nombre de archivo no se está codificando.
@@ -1509,11 +1513,6 @@ function conectarVisor() {
   el('#visor-prev').addEventListener('click', () => navegarVisor(-1));
   el('#visor-next').addEventListener('click', () => navegarVisor(1));
 
-  /* Clic en el fondo (no en la barra ni en el PDF) cierra */
-  el('#visor').addEventListener('click', (ev) => {
-    if (ev.target === el('#visor') || ev.target === el('#visor-cuerpo')) cerrarVisor();
-  });
-
   document.addEventListener('keydown', (ev) => {
     if (!el('#visor').classList.contains('abierto')) return;
     if (ev.key === 'Escape')     { cerrarVisor(); }
@@ -1556,7 +1555,8 @@ Y al final de `init()`, después de `render();`:
 - Clic en cualquier fila → se abre el overlay a pantalla completa con el PDF visible y
   con scroll dentro del visor nativo.
 - La barra muestra la clave, el nombre y el contador "1 / 17".
-- `Esc` cierra. El botón ✕ cierra. Clic en el fondo negro cierra.
+- `Esc` cierra. El botón ✕ cierra. (No hay cierre por clic en el fondo: con el visor a
+  sangre no queda fondo clicable y el iframe no propaga sus clics. Ver spec §6.3.)
 - Con "Todas" activo, ← y → recorren las 17 láminas en orden.
 - En la primera lámina, ‹ sale deshabilitado; en la última, ›.
 - **Prueba clave del alcance del filtro:** activar el chip "Acabados" (2 planos), abrir

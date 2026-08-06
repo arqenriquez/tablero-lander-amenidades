@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LANDER · Tablero de Control | Metta</title>
+<!-- El nombre del cliente va escrito aquí a propósito (no __CLIENTE__): los
+     rastreadores de vistas previas (WhatsApp, Slack, LinkedIn, Facebook,
+     iMessage) no ejecutan JavaScript, así que branding.js nunca llega a
+     sustituir el marcador para ellos. js/branding.js sigue intacto. -->
+<meta name="description" content="Tablero de control del paquete de amenidades de Desarrollos Residenciales LANDER — Casa Club en Hermosillo, Sonora. Metta Arquitectura y Construcción.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- CACHE-BUSTING: sube ?v=YYYYMMDD cuando cambies styles.css o los scripts -->
+<link rel="stylesheet" href="css/styles.css?v=20260806">
+</head>
+<body data-seccion="Tablero de Control">
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="topbar-logo">
+      <img src="assets/logo-cliente.png" alt="LANDER" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+      <span class="fallback" style="display:none">LANDER</span>
+      <img src="assets/logo-metta.png" alt="Metta" onerror="this.style.display='none'">
+    </a>
+    <a href="index.html" class="topbar-inicio">INICIO</a>
+    <span class="topbar-tag">Tablero de Control · Metta</span>
+  </div>
+</nav>
+
+<!-- ============ HERO PRINCIPAL ============ -->
+<section class="home-hero">
+  <div class="home-hero-inner">
+    <div class="eyebrow fade-up">Gerencia de Proyecto · <span data-brand-gerencia>Metta Arquitectura y Construcción</span></div>
+    <h1 class="fade-up delay-1"><span id="hero-nombre">LANDER · Amenidades</span><br>Tablero de control</h1>
+    <p class="lead fade-up delay-2" id="hero-descripcion">
+      Seguimiento del paquete de amenidades del desarrollo LANDER en Hermosillo, Sonora.
+      Planos ejecutivos, presupuesto base, programa de obra y reportes semanales —
+      todo en un solo lugar.
+    </p>
+    <div class="home-meta fade-up delay-3">
+      <div class="home-meta-item">
+        <div class="lbl">Ubicación</div>
+        <div class="val" id="meta-ubicacion">Hermosillo, Sonora</div>
+      </div>
+      <div class="home-meta-item">
+        <div class="lbl">Alcance</div>
+        <div class="val" id="meta-alcance">Casa Club · Etapa 1</div>
+      </div>
+      <div class="home-meta-item">
+        <div class="lbl">Inicio</div>
+        <div class="val" id="meta-inicio">—</div>
+      </div>
+      <div class="home-meta-item">
+        <div class="lbl">Término</div>
+        <div class="val" id="meta-fin">—</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BANDA DE INDICADORES RÁPIDOS ============ -->
+<section class="quickstats">
+  <div class="quickstats-grid">
+    <div class="quickstat fade-up">
+      <div class="lbl">Avance real</div>
+      <div class="val accent" id="qs-real">—</div>
+      <div class="sub" id="qs-real-sub">Sin reportes aún</div>
+    </div>
+    <div class="quickstat fade-up delay-1">
+      <div class="lbl">Avance programado</div>
+      <div class="val" id="qs-prog">—</div>
+      <div class="sub">A la fecha de corte</div>
+    </div>
+    <div class="quickstat fade-up delay-2">
+      <div class="lbl">Variación</div>
+      <div class="val" id="qs-var">—</div>
+      <div class="sub" id="qs-var-sub">Real vs. programado</div>
+    </div>
+    <div class="quickstat fade-up delay-3">
+      <div class="lbl">Días restantes</div>
+      <div class="val alt" id="qs-dias">—</div>
+      <div class="sub" id="qs-dias-sub">Para el término de obra</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRID DE MÓDULOS ============ -->
+<section class="modules">
+  <div class="modules-header">
+    <h2>Módulos del tablero</h2>
+    <span class="count">4 módulos</span>
+  </div>
+  <div class="modules-grid">
+
+    <a href="planos.html" class="module-card fade-up">
+      <div class="module-card-top">
+        <div class="module-icon">📐</div>
+        <div class="module-num">01</div>
+      </div>
+      <h3>Planos</h3>
+      <p>Paquete de planos ejecutivos del Casa Club. Filtra por especialidad o busca por clave, y ábrelos a pantalla completa sin salir del tablero.</p>
+      <div class="module-arrow">Ver planos <span class="dot">→</span></div>
+    </a>
+
+    <div class="module-card disabled fade-up delay-1">
+      <div class="module-card-top">
+        <div class="module-icon">💵</div>
+        <span class="soon-badge">Próximamente</span>
+      </div>
+      <h3>Presupuesto base interno</h3>
+      <p>Presupuesto base de control interno de la obra, con su desglose por partida.</p>
+    </div>
+
+    <div class="module-card disabled fade-up delay-2">
+      <div class="module-card-top">
+        <div class="module-icon">📅</div>
+        <span class="soon-badge">Próximamente</span>
+      </div>
+      <h3>Programa de obra</h3>
+      <p>Gantt del programa de obra con ruta crítica y avance por tarea. En elaboración.</p>
+    </div>
+
+    <div class="module-card disabled fade-up">
+      <div class="module-card-top">
+        <div class="module-icon">📈</div>
+        <span class="soon-badge">Próximamente</span>
+      </div>
+      <h3>Reportes semanales</h3>
+      <p>Reporte de estatus semanal: avance físico-financiero, actividades y reporte fotográfico.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="brand">LANDER <span>·</span> Tablero de Control</div>
+  <div><span data-brand-gerencia>Metta Arquitectura y Construcción</span> · Gerencia de Proyecto · <span data-brand-ubicacion>Hermosillo, Sonora</span></div>
+</footer>
+
+<script src="js/branding.js?v=20260806"></script>
+<script src="js/shell.js?v=20260806"></script>
+</body>
+</html>
