@@ -46,7 +46,8 @@ function renderProyecto(datos) {
   /* Días restantes para el término de obra */
   if (!p.fecha_fin) return;
   const hoy = new Date();
-  const fin = new Date(p.fecha_fin + 'T00:00:00');
+  hoy.setHours(0, 0, 0, 0);                          // medianoche local, igual que "fin"
+  const fin = new Date(p.fecha_fin + 'T00:00:00');   // medianoche
   const dias = Math.round((fin - hoy) / (1000 * 60 * 60 * 24));
   const el = $('#qs-dias');
   if (dias > 0) {

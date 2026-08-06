@@ -26,6 +26,19 @@ function normaliza(texto) {
     .normalize('NFD').replace(/\p{Diacritic}/gu, '');
 }
 
+/* Escapa & < > " ' antes de interpolar texto del catálogo en innerHTML.
+   El catálogo (data/planos/index.json) lo edita el dueño a mano copiando
+   nombres de cuadros de rotulación; sin esto, una comilla o un "&" en
+   "nombre" corrompería la fila o un atributo (download="...", title="..."). */
+function esc(texto) {
+  return (texto ?? '').toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* Los nombres de archivo traen espacios y puntos: hay que codificarlos */
 function urlPlano(plano) {
   return RUTA_PDFS + encodeURIComponent(plano.archivo);
@@ -120,13 +133,13 @@ function filaPlano(plano, indice) {
   fila.innerHTML = `
     <div class="plano-ico" aria-hidden="true">PDF</div>
     <div class="plano-datos">
-      <div class="plano-clave">${plano.clave}</div>
-      <div class="plano-nombre">${plano.nombre}</div>
-      ${tags.length ? `<div class="plano-tags">${tags.map(t => `<span class="plano-tag">${t}</span>`).join('')}</div>` : ''}
+      <div class="plano-clave">${esc(plano.clave)}</div>
+      <div class="plano-nombre">${esc(plano.nombre)}</div>
+      ${tags.length ? `<div class="plano-tags">${tags.map(t => `<span class="plano-tag">${esc(t)}</span>`).join('')}</div>` : ''}
     </div>
     <div class="plano-acciones">
       <a class="plano-btn plano-btn-primario abrir" href="${urlPlano(plano)}" target="_blank" rel="noopener">Abrir</a>
-      <a class="plano-btn" href="${urlPlano(plano)}" download="${plano.clave} ${plano.nombre}.pdf">Descargar</a>
+      <a class="plano-btn" href="${urlPlano(plano)}" download="${esc(plano.clave)} ${esc(plano.nombre)}.pdf">Descargar</a>
     </div>`;
 
   /* El visor de la tarea 5 se engancha aquí; el href queda como respaldo */
@@ -225,13 +238,24 @@ function pintarVisor() {
 
   const cuerpo = el('#visor-cuerpo');
   cuerpo.innerHTML = puedeEmbeberPDF()
-    ? `<iframe src="${url}#view=FitH" title="${plano.clave} · ${plano.nombre}"></iframe>`
+    ? `<iframe src="${url}#view=FitH" title="${esc(plano.clave)} · ${esc(plano.nombre)}"></iframe>`
     : `<div class="visor-fallback">
          <div class="ico">📄</div>
-         <h3>${plano.clave} · ${plano.nombre}</h3>
+         <h3>${esc(plano.clave)} · ${esc(plano.nombre)}</h3>
          <p>Tu navegador no puede mostrar el PDF dentro de la página.</p>
          <a class="visor-btn" href="${url}" target="_blank" rel="noopener">Abrir plano</a>
        </div>`;
+}
+
+/* Marca inerte (o restaura) todo lo que queda fuera de #visor, para que el
+   fondo no reciba foco por Tab ni lo vea el árbol de accesibilidad mientras
+   el visor está abierto con aria-modal="true". Se comprueba el soporte de
+   "inert" antes de tocar el DOM: en navegadores que no lo tienen, la
+   función no hace nada (el foco no queda estrictamente contenido, pero
+   tampoco se lanza ningún error). */
+function marcarFondoInerte(inerte) {
+  if (!('inert' in HTMLElement.prototype)) return;
+  document.querySelectorAll('body > :not(#visor)').forEach(n => { n.inert = inerte; });
 }
 
 function abrirPlano(indice, ev) {
@@ -239,6 +263,7 @@ function abrirPlano(indice, ev) {
   estado.indiceVisor = indice;
   el('#visor').classList.add('abierto');
   document.body.classList.add('visor-abierto');
+  marcarFondoInerte(true);
   pintarVisor();
   el('#visor-cerrar').focus();
 
@@ -251,6 +276,7 @@ function cerrarVisor({ volverHistorial = true } = {}) {
   if (!el('#visor').classList.contains('abierto')) return;
   el('#visor').classList.remove('abierto');
   document.body.classList.remove('visor-abierto');
+  marcarFondoInerte(false);
   el('#visor-cuerpo').innerHTML = '';   // detiene la carga del PDF
   estado.indiceVisor = -1;
   if (volverHistorial && history.state && history.state.visor) history.back();
