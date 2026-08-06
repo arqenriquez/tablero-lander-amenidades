@@ -270,11 +270,6 @@ function conectarVisor() {
   el('#visor-prev').addEventListener('click', () => navegarVisor(-1));
   el('#visor-next').addEventListener('click', () => navegarVisor(1));
 
-  /* Clic en el fondo (no en la barra ni en el PDF) cierra */
-  el('#visor').addEventListener('click', (ev) => {
-    if (ev.target === el('#visor') || ev.target === el('#visor-cuerpo')) cerrarVisor();
-  });
-
   document.addEventListener('keydown', (ev) => {
     if (!el('#visor').classList.contains('abierto')) return;
     if (ev.key === 'Escape')     { cerrarVisor(); }
