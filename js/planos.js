@@ -12,6 +12,7 @@ const estado = {
   filtro: 'todas',  // id de especialidad o 'todas'
   busqueda: '',
   visibles: [],     // planos que pasan filtro + búsqueda, en el orden mostrado
+  indiceVisor: -1,  // índice dentro de visibles del plano abierto en el visor
 };
 
 const el = (sel) => document.querySelector(sel);
@@ -192,9 +193,106 @@ function render() {
   renderLista();
 }
 
-/* Stub: la tarea 5 lo sustituye por el visor a pantalla completa.
-   Por ahora deja pasar el clic y el navegador abre el PDF en otra pestaña. */
-function abrirPlano(_indice, _ev) { /* sin comportamiento propio todavía */ }
+/* ------------------------------------------------------------
+   Visor a pantalla completa
+   ------------------------------------------------------------ */
+
+/* Safari en iOS no hace scroll dentro de un iframe con PDF: muestra
+   solo la primera página o una pantalla en blanco. Ahí usamos respaldo. */
+function puedeEmbeberPDF() {
+  const esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (esIOS) return false;
+  if (navigator.pdfViewerEnabled === false) return false;
+  return true;
+}
+
+function pintarVisor() {
+  const plano = estado.visibles[estado.indiceVisor];
+  if (!plano) return;
+  const url = urlPlano(plano);
+
+  el('#visor-clave').textContent = plano.clave;
+  el('#visor-nombre').textContent = plano.nombre;
+  el('#visor-contador').textContent = `${estado.indiceVisor + 1} / ${estado.visibles.length}`;
+  el('#visor-pestana').href = url;
+  const desc = el('#visor-descargar');
+  desc.href = url;
+  desc.setAttribute('download', `${plano.clave} ${plano.nombre}.pdf`);
+
+  el('#visor-prev').disabled = estado.indiceVisor === 0;
+  el('#visor-next').disabled = estado.indiceVisor === estado.visibles.length - 1;
+
+  const cuerpo = el('#visor-cuerpo');
+  cuerpo.innerHTML = puedeEmbeberPDF()
+    ? `<iframe src="${url}#view=FitH" title="${plano.clave} · ${plano.nombre}"></iframe>`
+    : `<div class="visor-fallback">
+         <div class="ico">📄</div>
+         <h3>${plano.clave} · ${plano.nombre}</h3>
+         <p>Tu navegador no puede mostrar el PDF dentro de la página.</p>
+         <a class="visor-btn" href="${url}" target="_blank" rel="noopener">Abrir plano</a>
+       </div>`;
+}
+
+function abrirPlano(indice, ev) {
+  if (ev) ev.preventDefault();
+  estado.indiceVisor = indice;
+  el('#visor').classList.add('abierto');
+  document.body.classList.add('visor-abierto');
+  pintarVisor();
+  el('#visor-cerrar').focus();
+
+  /* Link compartible + el botón atrás del celular cierra el visor */
+  const plano = estado.visibles[indice];
+  history.pushState({ visor: true }, '', `?plano=${encodeURIComponent(plano.clave)}`);
+}
+
+function cerrarVisor({ volverHistorial = true } = {}) {
+  if (!el('#visor').classList.contains('abierto')) return;
+  el('#visor').classList.remove('abierto');
+  document.body.classList.remove('visor-abierto');
+  el('#visor-cuerpo').innerHTML = '';   // detiene la carga del PDF
+  estado.indiceVisor = -1;
+  if (volverHistorial && history.state && history.state.visor) history.back();
+}
+
+function navegarVisor(delta) {
+  const siguiente = estado.indiceVisor + delta;
+  if (siguiente < 0 || siguiente >= estado.visibles.length) return;
+  estado.indiceVisor = siguiente;
+  pintarVisor();
+  const plano = estado.visibles[siguiente];
+  history.replaceState({ visor: true }, '', `?plano=${encodeURIComponent(plano.clave)}`);
+}
+
+function conectarVisor() {
+  el('#visor-cerrar').addEventListener('click', () => cerrarVisor());
+  el('#visor-prev').addEventListener('click', () => navegarVisor(-1));
+  el('#visor-next').addEventListener('click', () => navegarVisor(1));
+
+  /* Clic en el fondo (no en la barra ni en el PDF) cierra */
+  el('#visor').addEventListener('click', (ev) => {
+    if (ev.target === el('#visor') || ev.target === el('#visor-cuerpo')) cerrarVisor();
+  });
+
+  document.addEventListener('keydown', (ev) => {
+    if (!el('#visor').classList.contains('abierto')) return;
+    if (ev.key === 'Escape')     { cerrarVisor(); }
+    if (ev.key === 'ArrowLeft')  { navegarVisor(-1); }
+    if (ev.key === 'ArrowRight') { navegarVisor(1); }
+  });
+
+  /* Botón atrás del navegador */
+  window.addEventListener('popstate', () => cerrarVisor({ volverHistorial: false }));
+}
+
+/* Abre directo el plano de ?plano=CLAVE, si viene en la URL */
+function abrirDesdeURL() {
+  const clave = new URLSearchParams(location.search).get('plano');
+  if (!clave) return;
+  const i = estado.visibles.findIndex(p => p.clave === clave);
+  if (i >= 0) abrirPlano(i, null);
+}
 
 /* ------------------------------------------------------------
    Arranque
@@ -234,6 +332,8 @@ async function init() {
   });
 
   render();
+  conectarVisor();
+  abrirDesdeURL();
 }
 
 document.addEventListener('DOMContentLoaded', init);
