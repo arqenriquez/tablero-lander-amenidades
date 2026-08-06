@@ -114,15 +114,17 @@ Estructura, tipografía y componentes (topbar, hero, cards, footer, animaciones
 
 ```css
 :root {
-  /* Acento principal — verde olivo LANDER */
-  --accent:        #6E9B2E;   /* texto, botones, links */
-  --accent-dark:   #55781F;   /* hover */
-  --accent-bright: #8CC63F;   /* lima del logo — rellenos, barras, detalles */
+  /* Acento principal — verde LANDER */
+  --accent:        #5A7F26;   /* texto, links, botones      · 4.7:1 sobre blanco */
+  --accent-dark:   #47651E;   /* hover */
+  --accent-mid:    #6E9B2E;   /* rellenos, bordes, íconos   · 3.3:1 — no texto */
+  --accent-bright: #8CC63F;   /* lima del logo — sobre fondo oscuro, barras */
   --accent-soft:   #eef6e1;   /* fondos suaves */
 
-  /* Secundario — gris del logotipo */
-  --gray:          #808285;
-  --gray-soft:     #f2f2f2;
+  /* Acento secundario — gris del logotipo (alterna en las cards) */
+  --accent2:       #808285;
+  --accent2-dark:  #63666A;   /* texto secundario           · 5.8:1 sobre blanco */
+  --accent2-soft:  #f1f2f2;
 
   /* Tinta y fondos (heredados del patrón Altozano) */
   --ink:           #2b2e2c;
@@ -131,9 +133,14 @@ Estructura, tipografía y componentes (topbar, hero, cards, footer, animaciones
 }
 ```
 
-**Regla de contraste:** `--accent-bright` (#8CC63F) da 2.1:1 sobre blanco, insuficiente
-para texto. Se usa **solo** en rellenos, barras, degradados y detalles gráficos. Todo
-texto de acento usa `--accent` (#6E9B2E).
+**Regla de contraste.** Solo `--accent` (#5A7F26) y `--accent2-dark` (#63666A) pueden ir
+como texto sobre blanco; ambos superan 4.5:1. `--accent-mid` (#6E9B2E) da 3.3:1 y
+`--accent-bright` (#8CC63F) da 2.1:1: van únicamente en rellenos, bordes, íconos, barras
+y degradados. Sobre el hero oscuro sí manda `--accent-bright`, que es donde el lima del
+logo se luce.
+
+El logo LANDER es verde **y gris**, así que la alternancia par/impar de las tarjetas de
+módulo usa verde y gris en lugar del verde/dorado de Altozano.
 
 Tipografía sin cambios: Poppins (títulos), Inter (texto), JetBrains Mono (números y
 claves de plano).
