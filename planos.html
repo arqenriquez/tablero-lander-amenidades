@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LANDER · Planos | Metta</title>
+<meta name="description" content="Paquete de planos ejecutivos del Casa Club de __CLIENTE__.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=20260806">
+</head>
+<body data-seccion="Planos">
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="topbar-logo">
+      <img src="assets/logo-cliente.png" alt="LANDER" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+      <span class="fallback" style="display:none">LANDER</span>
+      <img src="assets/logo-metta.png" alt="Metta" onerror="this.style.display='none'">
+    </a>
+    <a href="index.html" class="topbar-inicio">INICIO</a>
+    <a href="index.html" class="back-link">← Volver al tablero</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="eyebrow fade-up">Módulo 01 · Proyecto ejecutivo</div>
+  <h1 class="fade-up delay-1">Planos</h1>
+  <p class="lead fade-up delay-2">
+    Paquete de planos del Casa Club. Filtra por especialidad o busca por clave y nombre;
+    da clic en cualquier lámina para abrirla a pantalla completa.
+  </p>
+</section>
+
+<div class="planos-toolbar">
+  <div class="planos-toolbar-inner">
+    <div class="planos-buscador" id="buscador-wrap">
+      <span class="ico" aria-hidden="true">🔍</span>
+      <input type="search" id="buscador" placeholder="Buscar por clave o nombre…" aria-label="Buscar planos" autocomplete="off">
+      <button type="button" class="limpiar" id="limpiar-busqueda" aria-label="Limpiar búsqueda">✕</button>
+    </div>
+    <div class="planos-chips" id="chips" role="group" aria-label="Filtrar por especialidad">
+      <span class="planos-conteo" id="conteo">—</span>
+    </div>
+  </div>
+</div>
+
+<section class="cards-section">
+  <div id="lista"><div class="loading">Cargando planos…</div></div>
+</section>
+
+<footer>
+  <div class="brand">LANDER <span>·</span> Planos</div>
+  <div><span data-brand-gerencia>Metta Arquitectura y Construcción</span> · Gerencia de Proyecto</div>
+</footer>
+
+<script src="js/branding.js?v=20260806"></script>
+<script src="js/planos.js?v=20260806"></script>
+</body>
+</html>

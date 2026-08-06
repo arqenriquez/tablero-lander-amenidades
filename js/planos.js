@@ -1,0 +1,239 @@
+/* ============================================================
+   LANDER · TABLERO · Módulo 01 · Planos
+   Carga data/planos/index.json, dibuja los filtros y el listado.
+   Agrupa por especialidad cuando no hay filtro ni búsqueda; en
+   cuanto se filtra o se busca, pasa a lista plana ordenada por clave.
+   ============================================================ */
+
+const RUTA_PDFS = 'data/planos/';
+
+const estado = {
+  catalogo: null,   // { actualizado, especialidades, planos }
+  filtro: 'todas',  // id de especialidad o 'todas'
+  busqueda: '',
+  visibles: [],     // planos que pasan filtro + búsqueda, en el orden mostrado
+};
+
+const el = (sel) => document.querySelector(sel);
+
+/* Minúsculas y sin acentos, para que "hidraulico" encuentre "Hidráulica".
+   \p{Diacritic} son las marcas de acento que suelta normalize('NFD').
+   Se usa la propiedad Unicode (bandera u) en vez del rango literal
+   U+0300-U+036F, que son caracteres invisibles y se corrompen al copiar. */
+function normaliza(texto) {
+  return (texto || '').toString().toLowerCase()
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
+/* Los nombres de archivo traen espacios y puntos: hay que codificarlos */
+function urlPlano(plano) {
+  return RUTA_PDFS + encodeURIComponent(plano.archivo);
+}
+
+/* "2026-02-23" -> "23 feb 2026" */
+const MESES_CORTOS = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function fechaCorta(iso) {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m || !d) return iso;
+  return `${d} ${MESES_CORTOS[m - 1]} ${y}`;
+}
+
+/* Nombre visible de una especialidad; si no está declarada, usa su id crudo */
+function nombreEspecialidad(id) {
+  const e = estado.catalogo.especialidades.find(x => x.id === id);
+  return e ? e.nombre : id;
+}
+
+/* Orden de especialidades: primero las declaradas, luego las no declaradas */
+function especialidadesConPlanos() {
+  const declaradas = estado.catalogo.especialidades.map(e => e.id);
+  const usadas = [...new Set(estado.catalogo.planos.map(p => p.especialidad))];
+  const enOrden = declaradas.filter(id => usadas.includes(id));
+  const extras = usadas.filter(id => !declaradas.includes(id)).sort();
+  return [...enOrden, ...extras];
+}
+
+/* ------------------------------------------------------------
+   Filtrado
+   ------------------------------------------------------------ */
+function aplicarFiltros() {
+  const q = normaliza(estado.busqueda).trim();
+  let lista = estado.catalogo.planos.filter(p => {
+    if (estado.filtro !== 'todas' && p.especialidad !== estado.filtro) return false;
+    if (!q) return true;
+    return normaliza(`${p.clave} ${p.nombre} ${p.notas || ''}`).includes(q);
+  });
+
+  if (estado.filtro === 'todas' && !q) {
+    /* Modo agrupado: respeta el orden de especialidades y, dentro, la clave */
+    const orden = especialidadesConPlanos();
+    lista.sort((a, b) => {
+      const d = orden.indexOf(a.especialidad) - orden.indexOf(b.especialidad);
+      return d !== 0 ? d : a.clave.localeCompare(b.clave, 'es');
+    });
+  } else {
+    lista.sort((a, b) => a.clave.localeCompare(b.clave, 'es'));
+  }
+
+  estado.visibles = lista;
+}
+
+/* ------------------------------------------------------------
+   Render
+   ------------------------------------------------------------ */
+function renderChips() {
+  const cont = el('#chips');
+  const conteo = el('#conteo');
+  cont.querySelectorAll('.planos-chip').forEach(c => c.remove());
+
+  const total = estado.catalogo.planos.length;
+  const chips = [{ id: 'todas', nombre: 'Todas', n: total }];
+  especialidadesConPlanos().forEach(id => {
+    chips.push({
+      id,
+      nombre: nombreEspecialidad(id),
+      n: estado.catalogo.planos.filter(p => p.especialidad === id).length,
+    });
+  });
+
+  chips.forEach(c => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'planos-chip' + (estado.filtro === c.id ? ' activo' : '');
+    b.setAttribute('aria-pressed', String(estado.filtro === c.id));
+    b.innerHTML = `${c.nombre} <span class="n">${c.n}</span>`;
+    b.addEventListener('click', () => { estado.filtro = c.id; render(); });
+    cont.insertBefore(b, conteo);
+  });
+}
+
+function filaPlano(plano, indice) {
+  const tags = [];
+  if (plano.revision) tags.push(plano.revision);
+  if (plano.fecha) tags.push(fechaCorta(plano.fecha));
+  if (plano.notas) tags.push(plano.notas);
+
+  const fila = document.createElement('div');
+  fila.className = 'plano-fila';
+  fila.innerHTML = `
+    <div class="plano-ico" aria-hidden="true">PDF</div>
+    <div class="plano-datos">
+      <div class="plano-clave">${plano.clave}</div>
+      <div class="plano-nombre">${plano.nombre}</div>
+      ${tags.length ? `<div class="plano-tags">${tags.map(t => `<span class="plano-tag">${t}</span>`).join('')}</div>` : ''}
+    </div>
+    <div class="plano-acciones">
+      <a class="plano-btn plano-btn-primario abrir" href="${urlPlano(plano)}" target="_blank" rel="noopener">Abrir</a>
+      <a class="plano-btn" href="${urlPlano(plano)}" download="${plano.clave} ${plano.nombre}.pdf">Descargar</a>
+    </div>`;
+
+  /* El visor de la tarea 5 se engancha aquí; el href queda como respaldo */
+  fila.querySelector('.abrir').addEventListener('click', (ev) => abrirPlano(indice, ev));
+  return fila;
+}
+
+function renderLista() {
+  const cont = el('#lista');
+  cont.innerHTML = '';
+
+  if (!estado.visibles.length) {
+    cont.innerHTML = estado.busqueda || estado.filtro !== 'todas'
+      ? `<div class="empty-state">
+           <div class="icon">🔍</div>
+           <h3>Ningún plano coincide</h3>
+           <p>No hay resultados para los filtros activos.</p>
+           <p><button type="button" class="plano-btn" id="reset-filtros">Limpiar filtros</button></p>
+         </div>`
+      : `<div class="empty-state">
+           <div class="icon">📐</div>
+           <h3>Aún no hay planos publicados</h3>
+           <p>Coloca los PDF en <code>data/planos/</code> y agrégalos al arreglo
+              <code>planos</code> de <code>data/planos/index.json</code>.</p>
+         </div>`;
+    const reset = el('#reset-filtros');
+    if (reset) reset.addEventListener('click', () => {
+      estado.filtro = 'todas';
+      estado.busqueda = '';
+      el('#buscador').value = '';
+      el('#buscador-wrap').classList.remove('tiene-texto');
+      render();
+    });
+    return;
+  }
+
+  const agrupado = estado.filtro === 'todas' && !estado.busqueda.trim();
+  let grupoActual = null;
+
+  estado.visibles.forEach((plano, i) => {
+    if (agrupado && plano.especialidad !== grupoActual) {
+      grupoActual = plano.especialidad;
+      const h = document.createElement('h2');
+      h.className = 'planos-grupo';
+      h.textContent = nombreEspecialidad(grupoActual);
+      cont.appendChild(h);
+    }
+    cont.appendChild(filaPlano(plano, i));
+  });
+}
+
+function renderConteo() {
+  const n = estado.visibles.length;
+  const total = estado.catalogo.planos.length;
+  el('#conteo').textContent = n === total
+    ? `${total} plano${total === 1 ? '' : 's'}`
+    : `${n} de ${total} planos`;
+}
+
+function render() {
+  aplicarFiltros();
+  renderChips();
+  renderConteo();
+  renderLista();
+}
+
+/* Stub: la tarea 5 lo sustituye por el visor a pantalla completa.
+   Por ahora deja pasar el clic y el navegador abre el PDF en otra pestaña. */
+function abrirPlano(_indice, _ev) { /* sin comportamiento propio todavía */ }
+
+/* ------------------------------------------------------------
+   Arranque
+   ------------------------------------------------------------ */
+async function init() {
+  try {
+    const resp = await fetch(`data/planos/index.json?t=${Date.now()}`, { cache: 'no-cache' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    estado.catalogo = await resp.json();
+  } catch (e) {
+    console.warn('planos: no se pudo cargar el catálogo —', e.message);
+    el('#lista').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📐</div>
+        <h3>Aún no hay planos publicados</h3>
+        <p>No se pudo leer <code>data/planos/index.json</code>.</p>
+      </div>`;
+    el('#conteo').textContent = '—';
+    return;
+  }
+
+  estado.catalogo.especialidades = estado.catalogo.especialidades || [];
+  estado.catalogo.planos = estado.catalogo.planos || [];
+
+  const input = el('#buscador');
+  input.addEventListener('input', () => {
+    estado.busqueda = input.value;
+    el('#buscador-wrap').classList.toggle('tiene-texto', input.value.length > 0);
+    render();
+  });
+  el('#limpiar-busqueda').addEventListener('click', () => {
+    input.value = '';
+    estado.busqueda = '';
+    el('#buscador-wrap').classList.remove('tiene-texto');
+    input.focus();
+    render();
+  });
+
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', init);
