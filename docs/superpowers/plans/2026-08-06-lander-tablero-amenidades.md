@@ -1513,11 +1513,6 @@ function conectarVisor() {
   el('#visor-prev').addEventListener('click', () => navegarVisor(-1));
   el('#visor-next').addEventListener('click', () => navegarVisor(1));
 
-  /* Clic en el fondo (no en la barra ni en el PDF) cierra */
-  el('#visor').addEventListener('click', (ev) => {
-    if (ev.target === el('#visor') || ev.target === el('#visor-cuerpo')) cerrarVisor();
-  });
-
   document.addEventListener('keydown', (ev) => {
     if (!el('#visor').classList.contains('abierto')) return;
     if (ev.key === 'Escape')     { cerrarVisor(); }
@@ -1560,7 +1555,8 @@ Y al final de `init()`, después de `render();`:
 - Clic en cualquier fila → se abre el overlay a pantalla completa con el PDF visible y
   con scroll dentro del visor nativo.
 - La barra muestra la clave, el nombre y el contador "1 / 17".
-- `Esc` cierra. El botón ✕ cierra. Clic en el fondo negro cierra.
+- `Esc` cierra. El botón ✕ cierra. (No hay cierre por clic en el fondo: con el visor a
+  sangre no queda fondo clicable y el iframe no propaga sus clics. Ver spec §6.3.)
 - Con "Todas" activo, ← y → recorren las 17 láminas en orden.
 - En la primera lámina, ‹ sale deshabilitado; en la última, ›.
 - **Prueba clave del alcance del filtro:** activar el chip "Acabados" (2 planos), abrir

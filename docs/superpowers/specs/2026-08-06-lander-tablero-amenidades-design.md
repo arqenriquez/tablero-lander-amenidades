@@ -299,7 +299,13 @@ navegador aporta zoom, paginación, buscar texto, imprimir y descargar.
 no del catálogo completo. Contador "3 / 12". Teclas ← y →. Las flechas se deshabilitan
 en el primer y último elemento.
 
-**Cierre:** botón ✕, tecla `Esc`, o clic fuera del área del PDF.
+**Cierre:** botón ✕, tecla `Esc`, o el botón atrás del navegador.
+
+> No hay cierre por «clic fuera del PDF». Con el visor a sangre, la barra y el iframe
+> cubren la pantalla completa y no queda fondo que clicar; además un iframe se traga sus
+> propios clics, que nunca llegan a la página contenedora. La alternativa —insetear el
+> plano para dejar un marco negro clicable— desperdicia justo la pantalla que más importa
+> al leer un plano. Tres vías de cierre son suficientes.
 
 **Fallback iOS/Safari.** Safari en iOS no permite hacer scroll dentro de un iframe con
 PDF; muestra solo la primera página o una pantalla en blanco. Detección por
@@ -397,7 +403,7 @@ es una lista de comprobación manual, ejecutada con Live Server:
 
 **Visor**
 - [ ] Clic en un plano abre el overlay con el PDF visible
-- [ ] `Esc`, ✕ y clic fuera cierran el visor
+- [ ] `Esc` y ✕ cierran el visor
 - [ ] ← y → navegan dentro del filtro activo, no del catálogo completo
 - [ ] Flechas deshabilitadas en el primer y último plano
 - [ ] Botón atrás del navegador cierra el visor
