@@ -1,0 +1,14 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+*.code-workspace
+
+# Temporales de Office
+~$*
+
+# Dependencias (por si acaso)
+node_modules/
