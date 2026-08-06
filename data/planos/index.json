@@ -1,0 +1,35 @@
+{
+  "actualizado": "2026-08-06",
+  "especialidades": [
+    { "id": "arquitectonico", "nombre": "Arquitectónico" },
+    { "id": "estructural",    "nombre": "Estructural" },
+    { "id": "electrico",      "nombre": "Eléctrico" },
+    { "id": "hidrosanitario", "nombre": "Hidrosanitario" },
+    { "id": "aire",           "nombre": "Aire acondicionado" },
+    { "id": "paisajismo",     "nombre": "Paisajismo" },
+    { "id": "herreria",       "nombre": "Herrería y cancelería" },
+    { "id": "acabados",       "nombre": "Acabados" }
+  ],
+  "planos": [
+    { "clave": "ARQ-01", "nombre": "Planta de conjunto",      "especialidad": "arquitectonico", "archivo": "01.ARQ-CC-MDP NORTE V.03-01.CONJUNTO.pdf",  "revision": "V.03" },
+    { "clave": "ARQ-02", "nombre": "Planta arquitectónica",   "especialidad": "arquitectonico", "archivo": "01.ARQ-CC-MDP NORTE V.03-02.ARQ.pdf",       "revision": "V.03", "fecha": "2026-06-15" },
+    { "clave": "ARQ-03", "nombre": "Fachadas",                "especialidad": "arquitectonico", "archivo": "01.ARQ-CC-MDP NORTE V.03-03.FACHADAS.pdf",  "revision": "V.03" },
+    { "clave": "ARQ-04", "nombre": "Cortes",                  "especialidad": "arquitectonico", "archivo": "01.ARQ-CC-MDP NORTE V.03-04.CORTES.pdf",    "revision": "V.03" },
+
+    { "clave": "EST-01", "nombre": "Planta de conjunto",                        "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-01.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-02", "nombre": "Estructural de cubierta metálica 1",        "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-02.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-03", "nombre": "Cimentación cubierta metálica 1",           "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-03.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-04", "nombre": "Estructural de cubierta metálica 2",        "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-04.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-05", "nombre": "Cimentación cubierta metálica 2",           "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-05.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-06", "nombre": "Estructural de módulo de baños",            "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-06.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-07", "nombre": "Estructural de pórticos PR-01",             "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-07.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-08", "nombre": "Estructural de pórticos PR-02, 03 y 04",    "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-08.pdf", "fecha": "2026-02-23" },
+    { "clave": "EST-09", "nombre": "Estructural de cuarto de máquinas y fire pit", "especialidad": "estructural", "archivo": "03.- ESTRUCTURAL CASA CLUB  MDP NORTE 260223-EST-09.pdf", "fecha": "2026-02-23" },
+
+    { "clave": "IH-01",  "nombre": "Instalación hidráulica",  "especialidad": "hidrosanitario", "archivo": "04.INST. HIDROSANITARIA-CC-MDPL II V.02-HIDRAULICO.pdf", "revision": "V.02" },
+    { "clave": "IS-01",  "nombre": "Instalación sanitaria",   "especialidad": "hidrosanitario", "archivo": "04.INST. HIDROSANITARIA-CC-MDPL II V.02-SANITARIO.pdf",  "revision": "V.02" },
+
+    { "clave": "ACA-01", "nombre": "Planta de acabados",      "especialidad": "acabados", "archivo": "05.PLANO DE ACABADOS-CC-MDPL II V.03-ACA-01.pdf", "revision": "V.03" },
+    { "clave": "ACA-02", "nombre": "Acabados en fachada",     "especialidad": "acabados", "archivo": "05.PLANO DE ACABADOS-CC-MDPL II V.03-ACA-02.pdf", "revision": "V.03" }
+  ]
+}
