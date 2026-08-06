@@ -307,20 +307,40 @@ con ese parámetro, el visor se abre en ese plano automáticamente.
 
 ### 6.4 Inventario entregado
 
-17 PDFs (≈15 MB en total) en `data/planos/`, todos del **Casa Club**. Las especialidades
-se deducen del prefijo numérico del nombre de archivo:
+17 PDFs (≈15 MB) en `data/planos/`, todos del **Casa Club**. Las claves y los nombres se
+extrajeron del campo **CONTENIDO** y **PLANO No.** del cuadro de datos de cada PDF
+(vía `pdftotext -layout`), no del nombre de archivo.
 
-| Especialidad | Clave | Planos | Versión / fecha |
+| Clave | Nombre | Especialidad | Versión |
 |---|---|---|---|
-| Arquitectónico | `ARQ` | Conjunto, Arquitectónico, Fachadas, Cortes | V.03 |
-| Estructural | `EST` | EST-01 a EST-09 | 2026-02-23 |
-| Hidrosanitario | `IHS` | Hidráulico, Sanitario | V.02 |
-| Acabados | `ACA` | ACA-01, ACA-02 | V.03 |
+| ARQ-01 | Planta de conjunto | Arquitectónico | V.03 |
+| ARQ-02 | Planta arquitectónica | Arquitectónico | V.03 |
+| ARQ-03 | Fachadas | Arquitectónico | V.03 |
+| ARQ-04 | Cortes | Arquitectónico | V.03 |
+| EST-01 | Planta de conjunto | Estructural | — |
+| EST-02 | Estructural de cubierta metálica 1 | Estructural | — |
+| EST-03 | Cimentación cubierta metálica 1 | Estructural | — |
+| EST-04 | Estructural de cubierta metálica 2 | Estructural | — |
+| EST-05 | Cimentación cubierta metálica 2 | Estructural | — |
+| EST-06 | Estructural de módulo de baños | Estructural | — |
+| EST-07 | Estructural de pórticos PR-01 | Estructural | — |
+| EST-08 | Estructural de pórticos PR-02, 03 y 04 | Estructural | — |
+| EST-09 | Estructural de cuarto de máquinas y fire pit | Estructural | — |
+| IH-01 | Instalación hidráulica | Hidrosanitario | V.02 |
+| IS-01 | Instalación sanitaria | Hidrosanitario | V.02 |
+| ACA-01 | Planta de acabados | Acabados | V.03 |
+| ACA-02 | Acabados en fachada | Acabados | V.03 |
 
 **Los nombres de archivo no se renombran.** El campo `archivo` del catálogo apunta al
 nombre tal cual llegó del proyectista; `clave` y `nombre` son los campos legibles que ve
-el usuario. Así, cuando llegue una revisión nueva del proyectista, se sustituye el PDF y
-se ajusta una línea del JSON, sin renombrar nada.
+el usuario. Cuando llegue una revisión nueva, se sustituye el PDF y se ajusta una línea
+del JSON, sin renombrar nada.
+
+**Fechas.** Solo ARQ-02 trae fecha legible en el cuadro de datos (15/06/2026). El resto
+no la expone. El paquete estructural lleva `260223` en el nombre de archivo, que por
+formato AAMMDD correspondería al **23/02/2026** — es una lectura del nombre, no del
+cuadro de datos, así que se marca en el JSON pero conviene confirmarla con el
+proyectista. Los planos sin fecha simplemente no dibujan ese chip.
 
 Las especialidades declaradas en `especialidades` que hoy no tienen plano (Eléctrico,
 Aire acondicionado, Paisajismo, Herrería y cancelería) **no dibujan chip** hasta que
