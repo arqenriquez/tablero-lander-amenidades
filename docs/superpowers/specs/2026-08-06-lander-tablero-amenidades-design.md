@@ -27,7 +27,8 @@ publican como tarjetas marcadas "Próximamente" y se diseñan en prompts posteri
 | Duración estimada | 6 semanas |
 | Fecha de término estimada | 2026-09-21 |
 | Etapa | Etapa 1 (habrá una 2ª etapa) |
-| Ubicación | **Pendiente de insumo** — campo vacío en `proyecto.json` |
+| Ubicación | Hermosillo, Sonora |
+| Inmueble | Casa Club |
 
 La duración es preliminar y cambiará cuando exista el programa de obra. Vive en
 `data/proyecto.json`, no en el código, para poder ajustarla sin tocar HTML.
@@ -304,6 +305,32 @@ logra dos cosas: el botón atrás del celular cierra el visor en vez de salir de
 y se puede compartir por WhatsApp el link directo a un plano. Al cargar `planos.html`
 con ese parámetro, el visor se abre en ese plano automáticamente.
 
+### 6.4 Inventario entregado
+
+17 PDFs (≈15 MB en total) en `data/planos/`, todos del **Casa Club**. Las especialidades
+se deducen del prefijo numérico del nombre de archivo:
+
+| Especialidad | Clave | Planos | Versión / fecha |
+|---|---|---|---|
+| Arquitectónico | `ARQ` | Conjunto, Arquitectónico, Fachadas, Cortes | V.03 |
+| Estructural | `EST` | EST-01 a EST-09 | 2026-02-23 |
+| Hidrosanitario | `IHS` | Hidráulico, Sanitario | V.02 |
+| Acabados | `ACA` | ACA-01, ACA-02 | V.03 |
+
+**Los nombres de archivo no se renombran.** El campo `archivo` del catálogo apunta al
+nombre tal cual llegó del proyectista; `clave` y `nombre` son los campos legibles que ve
+el usuario. Así, cuando llegue una revisión nueva del proyectista, se sustituye el PDF y
+se ajusta una línea del JSON, sin renombrar nada.
+
+Las especialidades declaradas en `especialidades` que hoy no tienen plano (Eléctrico,
+Aire acondicionado, Paisajismo, Herrería y cancelería) **no dibujan chip** hasta que
+exista al menos un PDF suyo. Quedan declaradas para no tener que editar el JSON después.
+
+**Observación sobre el paquete:** los prefijos de archivo van 01, 03, 04, 05 — falta el
+**02**, que por la secuencia típica correspondería a instalación eléctrica. No bloquea
+nada: el módulo funciona con lo que haya y el chip de Eléctrico aparece solo cuando se
+sume ese paquete.
+
 ---
 
 ## 7. Manejo de errores
@@ -384,8 +411,8 @@ los respaldos; se sustituyen después sin tocar código.
 | Logo LANDER en PNG con fondo transparente | `assets/logo-cliente.png` | Texto "LANDER" como respaldo |
 | Render o foto del proyecto (mín. 1600 px de ancho) | `assets/hero-cliente.jpg` | Degradado verde sólido |
 | Favicon | `assets/favicon.png` | Sin favicon |
-| Ubicación del proyecto | `data/proyecto.json` | Campo vacío, muestra `—` |
-| PDFs de planos | `data/planos/` | Estado vacío del módulo |
+
+Los PDFs de planos **ya están entregados** (17 archivos, ver §6.4).
 
 ---
 
