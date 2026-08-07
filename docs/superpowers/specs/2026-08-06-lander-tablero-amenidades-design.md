@@ -80,7 +80,7 @@ JSON y en archivos PDF.
 ├── assets/
 │   ├── logo-cliente.png       Logo LANDER
 │   ├── logo-metta.png         Logo Metta
-│   ├── hero-cliente.jpg       Render o foto para el hero
+│   ├── hero-lander.jpg        Render del Casa Club para el hero
 │   └── favicon.png
 │
 ├── docs/superpowers/specs/    Documentos de diseño
@@ -118,7 +118,8 @@ Estructura, tipografía y componentes (topbar, hero, cards, footer, animaciones
   --accent:        #5A7F26;   /* texto, links, botones      · 4.7:1 sobre blanco */
   --accent-dark:   #47651E;   /* hover */
   --accent-mid:    #6E9B2E;   /* rellenos, bordes, íconos   · 3.3:1 — no texto */
-  --accent-bright: #8CC63F;   /* lima del logo — sobre fondo oscuro, barras */
+  --accent-bright: #8CC63F;   /* lima del logo — rellenos y barras, no texto */
+  --accent-pale:   #D4EC9F;   /* lima pálido — texto de acento sobre el hero */
   --accent-soft:   #eef6e1;   /* fondos suaves */
 
   /* Acento secundario — gris del logotipo (alterna en las cards) */
@@ -136,8 +137,17 @@ Estructura, tipografía y componentes (topbar, hero, cards, footer, animaciones
 **Regla de contraste.** Solo `--accent` (#5A7F26) y `--accent2-dark` (#63666A) pueden ir
 como texto sobre blanco; ambos superan 4.5:1. `--accent-mid` (#6E9B2E) da 3.3:1 y
 `--accent-bright` (#8CC63F) da 2.1:1: van únicamente en rellenos, bordes, íconos, barras
-y degradados. Sobre el hero oscuro sí manda `--accent-bright`, que es donde el lima del
-logo se luce.
+y degradados, **nunca como texto**.
+
+Sobre el hero manda `--accent-pale` (#D4EC9F). El lima del logo no sirve ahí: es un color
+de luminancia media (L≈0.46) y sobre el render —que es claro: cielo, muros blancos,
+concreto— se queda en 2.7–3.0:1 por más que se oscurezca el degradado. Necesitaría un
+fondo casi negro, que taparía el render. El lima pálido pasa AA en las cuatro bandas de
+texto del hero y conserva la familia cromática de la marca.
+
+Las opacidades del degradado del hero están **calibradas contra `hero-lander.jpg`**. Si
+se cambia el render hay que volver a medir: con las opacidades originales, sobre esta
+imagen, el texto blanco caía a 2.0:1.
 
 El logo LANDER es verde **y gris**, así que la alternancia par/impar de las tarjetas de
 módulo usa verde y gris en lugar del verde/dorado de Altozano.
@@ -157,7 +167,8 @@ archivo de logo falta, el `onerror` lo oculta y cae al texto de respaldo.
 
 ### Hero
 
-Fondo con `assets/hero-cliente.jpg` y degradado verde LANDER encima. Contiene:
+Fondo con `assets/hero-lander.jpg` (render del Casa Club, 2000×1200) y degradado verde
+LANDER encima. Contiene:
 
 - Eyebrow: "Gerencia de Proyecto · Metta Arquitectura y Construcción"
 - Título: "LANDER / Amenidades · Tablero de control"
@@ -442,7 +453,7 @@ los respaldos; se sustituyen después sin tocar código.
 | Insumo | Destino | Mientras tanto |
 |---|---|---|
 | Logo LANDER en PNG con fondo transparente | `assets/logo-cliente.png` | Texto "LANDER" como respaldo |
-| Render o foto del proyecto (mín. 1600 px de ancho) | `assets/hero-cliente.jpg` | Degradado verde sólido |
+| ~~Render del proyecto~~ **entregado 2026-08-07** | `assets/hero-lander.jpg` | — |
 | Favicon | `assets/favicon.png` | Sin favicon |
 
 Los PDFs de planos **ya están entregados** (17 archivos, ver §6.4).

@@ -25,7 +25,7 @@ sin dependencias de npm. Se actualiza editando archivos de datos y subiendo un c
 │   ├── planos/              index.json + los PDF
 │   └── reportes/index.json  Semanas publicadas (vacío por ahora)
 │
-├── assets/                  logo-cliente.png · logo-metta.png · hero-cliente.jpg · favicon.png
+├── assets/                  hero-lander.jpg ✓ · logo-cliente.png · logo-metta.png · favicon.png
 └── docs/superpowers/        Diseño y plan de implementación
 ```
 

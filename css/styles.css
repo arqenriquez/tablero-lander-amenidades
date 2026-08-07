@@ -24,7 +24,8 @@
   --accent: #5A7F26;         /* texto, links, botones      · 4.7:1 sobre blanco */
   --accent-dark: #47651E;    /* hover */
   --accent-mid: #6E9B2E;     /* rellenos, bordes, íconos   · 3.3:1 — NUNCA texto */
-  --accent-bright: #8CC63F;  /* lima del logo — sobre fondo oscuro, barras */
+  --accent-bright: #8CC63F;  /* lima del logo — rellenos y barras sobre fondo oscuro */
+  --accent-pale: #D4EC9F;    /* lima pálido — TEXTO de acento sobre el hero */
   --accent-soft: #eef6e1;
 
   /* ----- Acento GRIS (secundario, del logotipo) ----- */
@@ -119,15 +120,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
 .home-hero {
   position: relative;
   background:
-    linear-gradient(110deg, rgba(28,45,12,0.92) 0%, rgba(58,86,26,0.72) 55%, rgba(90,127,38,0.45) 100%),
-    url('../assets/hero-cliente.jpg') center/cover no-repeat;
+    linear-gradient(110deg, rgba(18,32,6,0.94) 0%, rgba(34,56,14,0.88) 55%, rgba(52,80,22,0.80) 100%),
+    url('../assets/hero-lander.jpg') center/cover no-repeat;
   /* Base opaca detrás del degradado: el shorthand "background" de arriba
      resetea background-color a transparent, y las tres paradas del
-     degradado son translúcidas. Sin esta base, el fondo real es el
-     blanco de la página y el texto pierde contraste. Va DESPUÉS del
-     shorthand a propósito — el orden importa. Sirve tanto ahora (sin
-     imagen) como cuando se agregue assets/hero-cliente.jpg. */
+     degradado son translúcidas. Sin esta base, si la imagen falta el fondo
+     real es el blanco de la página y el texto se vuelve ilegible. Va
+     DESPUÉS del shorthand a propósito — el orden importa. */
   background-color: #24380f;
+  /* Las opacidades del degradado están calibradas contra hero-lander.jpg,
+     que es un render muy claro (cielo, muros blancos, concreto). Con las
+     opacidades originales el texto blanco caía a 2.0:1. Si algún día se
+     cambia el render, hay que volver a medir el contraste del hero. */
   color: #fff;
   overflow: hidden;
 }
@@ -135,7 +139,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   content: '';
   position: absolute; right: -10%; top: -30%;
   width: 60%; height: 160%;
-  background: radial-gradient(circle, rgba(140,198,63,0.25) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(140,198,63,0.14) 0%, transparent 65%);
   pointer-events: none;
 }
 .home-hero-inner {
@@ -145,16 +149,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
 }
 .home-hero .eyebrow {
   font-size: 0.78rem; letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--accent-bright); font-weight: 600; margin-bottom: 1.25rem;
+  color: var(--accent-pale); font-weight: 600; margin-bottom: 1.25rem;
 }
 .home-hero h1 {
   font-size: clamp(2.8rem, 7vw, 5.5rem);
   font-weight: 500; letter-spacing: -0.03em; line-height: 1.0;
   margin-bottom: 1.25rem;
 }
-.home-hero h1 span { color: var(--accent-bright); }
+.home-hero h1 span { color: var(--accent-pale); }
 .home-hero .lead {
-  font-size: 1.15rem; color: rgba(255,255,255,0.82);
+  font-size: 1.15rem; color: rgba(255,255,255,0.92);
   max-width: 640px; line-height: 1.6; margin-bottom: 2.5rem;
   font-family: var(--font-body);
 }
@@ -162,7 +166,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
   display: flex; flex-wrap: wrap; gap: 0;
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 14px; overflow: hidden;
-  background: rgba(255,255,255,0.06);
+  /* Tinte oscuro, no claro: la banda va sobre el render y necesita oscurecer
+     para que las etiquetas chicas conserven contraste. */
+  background: rgba(12,22,4,0.30);
   backdrop-filter: blur(8px);
 }
 .home-meta-item {
@@ -173,7 +179,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); }
 .home-meta-item:last-child { border-right: none; }
 .home-meta-item .lbl {
   font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--accent-bright); font-weight: 500; margin-bottom: 0.35rem;
+  color: var(--accent-pale); font-weight: 500; margin-bottom: 0.35rem;
 }
 .home-meta-item .val {
   font-family: var(--font-mono); font-size: 1rem; font-weight: 500; color: #fff;
