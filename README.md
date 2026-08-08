@@ -13,16 +13,21 @@ sin dependencias de npm. Se actualiza editando archivos de datos y subiendo un c
 ```
 ├── index.html               Portada: hero, indicadores y 4 módulos
 ├── planos.html              Módulo 01 · Catálogo de planos + visor PDF
+├── programa.html            Módulo 03 · Gantt del programa de obra
 │
-├── css/styles.css           Sistema de diseño compartido
+├── css/
+│   ├── styles.css           Sistema de diseño compartido
+│   └── gantt.css            Estilos exclusivos del Gantt
 ├── js/
 │   ├── branding.js          Identidad desde proyecto.json (todas las páginas)
 │   ├── shell.js             Lógica de la portada
-│   └── planos.js            Catálogo, filtros, buscador y visor
+│   ├── planos.js            Catálogo, filtros, buscador y visor
+│   └── gantt.js             Parser de XML de MS Project y render del Gantt
 │
 ├── data/
 │   ├── proyecto.json        Datos base del proyecto
 │   ├── planos/              index.json + los PDF
+│   ├── programa-lander.xml  Export de MS Project (reemplazable)
 │   └── reportes/index.json  Semanas publicadas (vacío por ahora)
 │
 ├── assets/                  hero-lander.jpg ✓ · logo-cliente.png · logo-metta.png · favicon.png
@@ -35,7 +40,7 @@ sin dependencias de npm. Se actualiza editando archivos de datos y subiendo un c
 |---|---|---|
 | 01 | Planos | Activo — 17 láminas del Casa Club |
 | 02 | Presupuesto base interno | Próximamente |
-| 03 | Programa de obra | Próximamente |
+| 03 | Programa de obra | Activo — 41 tareas, 10 ago a 26 sep 2026 |
 | 04 | Reportes semanales | Próximamente |
 
 ## Verlo en tu computadora

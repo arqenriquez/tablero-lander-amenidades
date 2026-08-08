@@ -83,3 +83,46 @@ en la portada, en el pie y en el título de todas las pestañas a la vez.
 
 Cuando exista el programa de obra definitivo, actualiza `fecha_fin`: de ahí sale el
 indicador "Días restantes".
+
+---
+
+## Actualizar el programa de obra
+
+1. En MS Project: **Archivo → Guardar como → XML**.
+2. Reemplaza `data/programa-lander.xml` con el archivo nuevo. **No cambies el nombre** —
+   `js/gantt.js` lo busca con esa ruta exacta.
+3. Commit y push.
+
+### Revisarlo antes de publicar
+
+Abre `programa.html` y **arrastra el XML nuevo sobre la página**. Se dibuja en tu
+navegador sin tocar el repositorio, así confirmas que el export salió bien antes de
+subirlo. También sirve el botón "Seleccionar archivo XML".
+
+### Qué lee el Gantt de cada tarea
+
+| Campo de MS Project | Para qué |
+|---|---|
+| `Name` | Nombre de la tarea |
+| `OutlineLevel` | Nivel de jerarquía y sangría |
+| `Summary` | Marca las filas de resumen (barra oscura) |
+| `Milestone` | Dibuja el rombo del hito |
+| `Critical` | Contorno rojo de ruta crítica |
+| `Start` / `Finish` | Posición y ancho de la barra |
+| `Duration` | Columna "Duración" |
+| `PercentComplete` | Relleno de avance dentro de la barra |
+| `StartDate` / `FinishDate` del proyecto | Rango del calendario |
+| `StatusDate` del proyecto | Posición inicial de la línea de corte |
+
+Si el proyecto no trae `StatusDate`, la fecha de corte arranca en hoy. La línea vertical
+solo se dibuja cuando esa fecha cae dentro del rango del programa.
+
+### Colores de las barras
+
+Se calculan comparando el avance real contra el esperado a la fecha de corte:
+
+- **Verde** — completada al 100 %
+- **Verde claro** — en proceso y al corriente
+- **Rojo** — atrasada (venció, o va más de 10 % por debajo de lo esperado)
+- **Naranja** — debió iniciar y sigue en 0 %
+- **Gris/verde claro** — aún no inicia

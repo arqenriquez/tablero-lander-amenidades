@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LANDER · Programa de Obra | Metta</title>
+  <!-- El nombre del cliente va escrito a propósito: los crawlers de vista
+       previa (WhatsApp, Slack, LinkedIn) no ejecutan JavaScript. -->
+  <meta name="description" content="Programa de obra del paquete de amenidades (Casa Club) de Desarrollos Residenciales LANDER — Hermosillo, Sonora." />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- CACHE-BUSTING: sube ?v=YYYYMMDD cuando cambies gantt.css o gantt.js -->
+  <link rel="stylesheet" href="css/gantt.css?v=20260807">
+</head>
+<body data-seccion="Programa de Obra">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <a href="index.html" class="gantt-back" title="Volver al tablero" aria-label="Volver al tablero">←</a>
+      <img src="assets/logo-cliente.png" alt="LANDER" class="logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline'" />
+      <span class="logo-fallback" style="display:none">LANDER</span>
+      <img src="assets/logo-metta.png" alt="Metta" class="logo"
+           onerror="this.style.display='none'" />
+      <div class="header-titles">
+        <h1 class="app-title">PROGRAMA DE OBRA</h1>
+        <h2 class="project-name" id="projectName">LANDER — AMENIDADES</h2>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-meta">
+        <span class="meta-item">
+          <span class="meta-label">Inicio:</span>
+          <span class="meta-value mono" id="projectStart">—</span>
+        </span>
+        <span class="meta-sep">|</span>
+        <span class="meta-item">
+          <span class="meta-label">Fin:</span>
+          <span class="meta-value mono" id="projectFinish">—</span>
+        </span>
+        <span class="meta-sep">|</span>
+        <span class="meta-item">
+          <label class="meta-label" for="statusDate">Fecha de corte:</label>
+          <input type="date" id="statusDate" class="mono" />
+        </span>
+      </div>
+
+      <div class="header-controls">
+        <button class="btn btn-mobile-toggle" id="btnDetailsToggle"
+                aria-label="Mostrar u ocultar columnas de detalle">
+          <span class="toggle-arrow">▶</span>
+          <span class="toggle-label">Detalles</span>
+        </button>
+        <button class="btn" id="btnExpandAll" title="Mostrar todas las tareas y sub-tareas">Desglosar</button>
+        <button class="btn" id="btnCollapseAll" title="Mostrar solo las partidas principales">Resumen</button>
+        <span class="meta-sep">|</span>
+        <span class="meta-item">
+          <span class="meta-label">Última actualización:</span>
+          <span class="meta-value mono" id="lastUpdate">—</span>
+        </span>
+        <button class="btn-header-collapse" id="btnHeaderCollapse"
+                aria-label="Contraer o expandir el encabezado" title="Contraer encabezado">
+          <span class="collapse-arrow">▲</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOADING -->
+  <div class="gantt-loading" id="ganttLoading">
+    <div class="gantt-loading-spinner" aria-hidden="true"></div>
+    <p class="gantt-loading-text">Cargando programa de obra…</p>
+  </div>
+
+  <!-- DROPZONE -->
+  <div class="dropzone" id="dropzone" hidden>
+    <div class="dropzone-inner">
+      <h3>No se pudo cargar <code>data/programa-lander.xml</code></h3>
+      <p>Arrastra aquí el archivo XML exportado desde MS Project, o haz clic para seleccionarlo.
+         Se dibuja en tu navegador, sin subirlo al repositorio.</p>
+      <input type="file" id="fileInput" accept=".xml" hidden />
+      <button class="btn btn-primary" id="btnFilePicker">Seleccionar archivo XML</button>
+      <p class="dropzone-hint">
+        Esto suele pasar al abrir <code>programa.html</code> con doble clic (<code>file://</code>).
+        Usa un servidor local (Live Server en VS Code) o abre el sitio publicado.
+      </p>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-panel" id="errorPanel" hidden>
+    <h3>Error al procesar el XML</h3>
+    <p id="errorMessage"></p>
+  </div>
+
+  <!-- VIEWER -->
+  <main class="viewer" id="viewer" hidden>
+    <section class="panel-left" id="panelLeft">
+      <div class="panel-left-header">
+        <div class="col-toggle"></div>
+        <div class="col-name">
+          <span>Nombre de tarea</span>
+          <button class="btn-col-shrink" id="btnNameShrink"
+                  aria-label="Reducir ancho de la columna de nombre"
+                  title="Reducir ancho de columna para ver más Gantt">
+            <span class="shrink-arrow">◀</span>
+          </button>
+        </div>
+        <div class="col-dur">Duración</div>
+        <div class="col-start">Comienzo</div>
+        <div class="col-finish">Fin</div>
+      </div>
+      <div class="panel-left-body" id="taskList"></div>
+    </section>
+
+    <section class="panel-right" id="panelRight">
+      <div class="timeline-header" id="timelineHeader"></div>
+      <div class="gantt-body" id="ganttBody">
+        <div class="status-line" id="statusLine" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- EMPTY -->
+  <div class="empty-state" id="emptyState" hidden>
+    <h3>No hay tareas para mostrar</h3>
+    <p>El archivo XML está vacío o no contiene tareas válidas.</p>
+  </div>
+
+  <script src="js/branding.js?v=20260807"></script>
+  <script src="js/gantt.js?v=20260807"></script>
+</body>
+</html>
